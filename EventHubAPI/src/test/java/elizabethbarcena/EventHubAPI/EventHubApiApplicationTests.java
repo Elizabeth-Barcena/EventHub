@@ -1,4 +1,4 @@
-package com.example.EventHubAPI;
+package elizabethbarcena.EventHubAPI;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
