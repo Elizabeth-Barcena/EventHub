@@ -1,6 +1,6 @@
 package elizabethbarcena.EventHubAPI.repository;
 
-import elizabethbarcena.EventHubAPI.Entity.Event;
+import elizabethbarcena.EventHubAPI.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

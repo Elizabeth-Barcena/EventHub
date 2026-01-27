@@ -1,8 +1,9 @@
 package elizabethbarcena.EventHubAPI.service.impl;
 
-import elizabethbarcena.EventHubAPI.Entity.Event;
+import elizabethbarcena.EventHubAPI.entity.Event;
 import elizabethbarcena.EventHubAPI.dto.EventRequest;
 import elizabethbarcena.EventHubAPI.dto.EventResponse;
+import elizabethbarcena.EventHubAPI.exceptions.EventNotFoundException;
 import elizabethbarcena.EventHubAPI.mapper.EventMapper;
 import elizabethbarcena.EventHubAPI.repository.EventRepository;
 import elizabethbarcena.EventHubAPI.service.EventService;
@@ -37,14 +38,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventResponse getEventById(Long id){
         Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new EventNotFoundException(id));
         return EventMapper.response(event);
     }
 
     @Override
     public EventResponse updateEvent(Long id, EventRequest request) {
         Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new EventNotFoundException(id));
 
         EventMapper.update(event, request);
 
@@ -56,7 +57,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void deleteEvent(Long id) {
         if (!eventRepository.existsById(id)) {
-            throw new RuntimeException("Event not found");
+            throw new EventNotFoundException(id);
         }
         eventRepository.deleteById(id);
     }

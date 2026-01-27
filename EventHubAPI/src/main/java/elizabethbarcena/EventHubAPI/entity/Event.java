@@ -1,4 +1,4 @@
-package elizabethbarcena.EventHubAPI.Entity;
+package elizabethbarcena.EventHubAPI.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
