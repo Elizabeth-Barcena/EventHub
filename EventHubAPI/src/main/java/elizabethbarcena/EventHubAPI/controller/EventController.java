@@ -1,7 +1,7 @@
 package elizabethbarcena.EventHubAPI.controller;
 
-import elizabethbarcena.EventHubAPI.dto.EventRequest;
-import elizabethbarcena.EventHubAPI.dto.EventResponse;
+import elizabethbarcena.EventHubAPI.dto.request.EventRequest;
+import elizabethbarcena.EventHubAPI.dto.response.EventResponse;
 import elizabethbarcena.EventHubAPI.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

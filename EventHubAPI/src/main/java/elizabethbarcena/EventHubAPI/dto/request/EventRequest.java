@@ -1,6 +1,7 @@
-package elizabethbarcena.EventHubAPI.dto;
+package elizabethbarcena.EventHubAPI.dto.request;
 
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,6 +20,7 @@ public class EventRequest {
     private String location;
 
     @NotNull(message = "Event capacity is required")
+    @Min(value = 1, message = "Event capacity must be greater than zero")
     private Integer capacity;
 
     public String getName() {

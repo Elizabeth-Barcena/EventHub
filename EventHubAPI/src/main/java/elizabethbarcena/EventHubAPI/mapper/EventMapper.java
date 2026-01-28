@@ -1,8 +1,8 @@
 package elizabethbarcena.EventHubAPI.mapper;
 
 import elizabethbarcena.EventHubAPI.entity.Event;
-import elizabethbarcena.EventHubAPI.dto.EventRequest;
-import elizabethbarcena.EventHubAPI.dto.EventResponse;
+import elizabethbarcena.EventHubAPI.dto.request.EventRequest;
+import elizabethbarcena.EventHubAPI.dto.response.EventResponse;
 
 public class EventMapper {
 
