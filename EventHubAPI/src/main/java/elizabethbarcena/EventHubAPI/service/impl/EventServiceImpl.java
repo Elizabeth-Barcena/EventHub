@@ -1,8 +1,8 @@
 package elizabethbarcena.EventHubAPI.service.impl;
 
 import elizabethbarcena.EventHubAPI.entity.Event;
-import elizabethbarcena.EventHubAPI.dto.EventRequest;
-import elizabethbarcena.EventHubAPI.dto.EventResponse;
+import elizabethbarcena.EventHubAPI.dto.request.EventRequest;
+import elizabethbarcena.EventHubAPI.dto.response.EventResponse;
 import elizabethbarcena.EventHubAPI.exceptions.EventNotFoundException;
 import elizabethbarcena.EventHubAPI.mapper.EventMapper;
 import elizabethbarcena.EventHubAPI.repository.EventRepository;

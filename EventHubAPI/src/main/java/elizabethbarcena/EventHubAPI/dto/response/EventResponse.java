@@ -1,4 +1,4 @@
-package elizabethbarcena.EventHubAPI.dto;
+package elizabethbarcena.EventHubAPI.dto.response;
 
 import java.time.LocalDateTime;
 

@@ -2,8 +2,8 @@ package elizabethbarcena.EventHubAPI.service;
 
 
 
-import elizabethbarcena.EventHubAPI.dto.EventRequest;
-import elizabethbarcena.EventHubAPI.dto.EventResponse;
+import elizabethbarcena.EventHubAPI.dto.request.EventRequest;
+import elizabethbarcena.EventHubAPI.dto.response.EventResponse;
 
 import java.util.List;
 
