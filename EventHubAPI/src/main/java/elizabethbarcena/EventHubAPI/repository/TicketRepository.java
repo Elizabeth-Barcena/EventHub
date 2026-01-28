@@ -14,4 +14,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByParticipantEmail(String email);
 
     List<Ticket> findByEventId(Long eventId);
+    long count();
+
+    long countByEventId(Long eventId);
+
+    long countByParticipantId(Long participantId);
 }
