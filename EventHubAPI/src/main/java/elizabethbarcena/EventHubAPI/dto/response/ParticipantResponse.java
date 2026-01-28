@@ -1,12 +1,22 @@
 package elizabethbarcena.EventHubAPI.dto.response;
 
 public class ParticipantResponse {
+    private Long id;
     private String name;
     private String email;
 
-    public ParticipantResponse(String name, String email) {
+    public ParticipantResponse(Long id,String name, String email) {
+        this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
