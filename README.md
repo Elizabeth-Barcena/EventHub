@@ -2,7 +2,7 @@
 
 API RESTful para gerenciamento de eventos, desenvolvida como parte do teste técnico para a vaga de Analista de Desenvolvimento Júnior.
 
-A aplicação permite criar, listar, buscar, atualizar e remover eventos, seguindo boas práticas de desenvolvimento backend com Java e Spring Boot.
+O projeto permite criar, atualizar,listar e remover eventos, vender ingressos, controlar capacidade, consultar histórico de compras seguindo boas práticas de desenvolvimento backend com Java e Spring Boot.
 
 🚀 Tecnologias Utilizadas
 
@@ -78,6 +78,7 @@ Essas validações são realizadas utilizando Bean Validation, garantindo respos
 - Um Event pode possuir vários Tickets
 - Um Participant pode comprar vários Tickets
 - Cada Ticket está associado a um único Event e um único Participant
+- Eventos com ingressos vendidos não podem ser excluídos
 
 O Ticket atua como entidade de associação entre Event e Participant, representando a compra de um ingresso.
 
@@ -88,30 +89,45 @@ Event
 | Campo	 |Tipo|
 |--------|---|
 | id	    |BIGINT (PK)|
-| name   |	VARCHAR(255)
-| date   |	DATETIME
-|location|	VARCHAR(255)
-|capacity	|INT
+| name   |	VARCHAR(255)|
+| date   |	DATETIME|
+|location|	VARCHAR(255)|
+|capacity	|INT|
 
 Participant
 
-| Campo	 | Tipo
+| Campo	 | Tipo|
 |--------|---|
-| id     |	BIGINT (PK)
-| name	  |VARCHAR(255)
-| email	 |VARCHAR(255)
+| id     |	BIGINT (PK)|
+| name	  |VARCHAR(255)|
+| email	 |VARCHAR(255)|
 
 Ticket
 
 | Campo |	Tipo|
 |---|---|
 |id |	BIGINT (PK)|
-| event_id      | BIGINT (FK)
-|participant_id	| BIGINT (FK)
-|purchase_date	| DATETIME
+| event_id      | BIGINT (FK)|
+|participant_id	| BIGINT (FK)|
+|purchase_date	| DATETIME|
 
 Obs: A versão do MySQL utilizada localmente é 5.7.
+### Relação entre as Tabelas
 
+- Um Event pode possuir vários Tickets
+
+- Um Participant pode comprar vários Tickets
+
+- Cada Ticket está associado a um único Event e a um único Participant
+
+    Event (1) ──── (N) Ticket (N) ──── (1) Participant
+
+
+Chaves estrangeiras:
+
+    tickets.event_id → events.id
+    
+    tickets.participant_id → participants.id
 
 📌 Endpoints Principais
 
@@ -138,6 +154,24 @@ Obs: A versão do MySQL utilizada localmente é 5.7.
 |Método|	Endpoint |	Descrição|
 |---|---|---|
 |GET|	/tickets/count/event/{eventId}	|Total de ingressos vendidos por evento|
+
+🧪 Testes Unitários
+
+O projeto conta com testes unitários focados na camada de controller, utilizando MockMvc e Mockito.
+
+Cobertura inclui:
+
+- Criação e validação de eventos
+
+- Venda de ingressos
+
+- Controle de capacidade
+
+- Histórico de ingressos por participante
+
+- Tentativa de exclusão de evento com ingressos vendidos
+
+- Tratamento de erros e status HTTP
 
 ▶️ Como Executar a Aplicação
 Pré-requisitos
@@ -184,6 +218,8 @@ A API possui tratamento global de exceções, retornando respostas padronizadas 
     Erros de validação (400)
     
     Erros inesperados (500)
+    
+    Erros com conflitos(409)
 
 
 👤 Autora
