@@ -10,8 +10,10 @@ import elizabethbarcena.EventHubAPI.entity.Ticket;
 import elizabethbarcena.EventHubAPI.exceptions.EventInvalidException;
 import elizabethbarcena.EventHubAPI.exceptions.EventNotFoundException;
 import elizabethbarcena.EventHubAPI.exceptions.EventSoldOutException;
+import elizabethbarcena.EventHubAPI.exceptions.ParticipantNotFoundException;
 import elizabethbarcena.EventHubAPI.mapper.TicketMapper;
 import elizabethbarcena.EventHubAPI.repository.EventRepository;
+import elizabethbarcena.EventHubAPI.repository.ParticipantRepository;
 import elizabethbarcena.EventHubAPI.repository.TicketRepository;
 import elizabethbarcena.EventHubAPI.service.ParticipantService;
 import elizabethbarcena.EventHubAPI.service.TicketService;
@@ -25,16 +27,19 @@ public class TicketServiceImpl implements TicketService {
 
     private final EventRepository eventRepository;
     private final TicketRepository ticketRepository;
+    private final ParticipantRepository participantRepository;
     private final ParticipantService participantService;
 
     public TicketServiceImpl(
             EventRepository eventRepository,
             TicketRepository ticketRepository,
-            ParticipantService participantService
+            ParticipantService participantService,
+            ParticipantRepository participantRepository
     ) {
         this.eventRepository = eventRepository;
         this.ticketRepository = ticketRepository;
         this.participantService = participantService;
+        this.participantRepository = participantRepository;
     }
 
     @Override
@@ -65,6 +70,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public List<TicketResponse> getTicketsByParticipantId(Long participantId) {
+        if (!participantRepository.existsById(participantId)) {
+            throw new ParticipantNotFoundException(participantId);
+        }
+
         return ticketRepository.findByParticipantId(participantId)
                 .stream()
                 .map(ticket -> TicketMapper.toResponse(ticket, ticket.getParticipant()))
@@ -74,6 +83,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public List<TicketResponse> getTicketsByParticipantEmail(String email) {
+        if (!participantRepository.existsByEmail(email)) {
+            throw new ParticipantNotFoundException(email);
+        }
+
         return ticketRepository.findByParticipantEmail(email)
                 .stream()
                 .map(ticket -> TicketMapper.toResponse(ticket, ticket.getParticipant()))
@@ -82,6 +95,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public long getTicketsSoldByEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() ->
+                        new EventNotFoundException(eventId)
+                );
         return ticketRepository.countByEventId(eventId);
     }
 }

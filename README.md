@@ -33,13 +33,17 @@ DTOs são utilizados para entrada e saída de dados
 
 Mapper centraliza a conversão entre Entity e DTO
 
-Interface + implementação no Service para baixo acoplamento
+Interface + implementação no Service
 
 Exceções customizadas e handler global para padronização de erros
 
-🗄️ Modelo de Evento
+🗄🗄️ Modelo de Domínio
 
-Um evento possui os seguintes campos:
+🎫 Event
+
+Representa um evento disponível para venda de ingressos.
+
+Campos principais:
 
     id
     
@@ -49,7 +53,15 @@ Um evento possui os seguintes campos:
     
     location
     
-    capacity
+    capacity (quantidade de ingressos disponíveis)
+
+Regras
+
+- A capacidade inicial deve ser maior que zero
+
+- A cada venda de ingresso, a capacidade é decrementada
+
+- Não é possível vender ingresso quando a capacidade é zero
 
 Regras de Validação
 
@@ -63,19 +75,69 @@ Essas validações são realizadas utilizando Bean Validation, garantindo respos
 
 ⚙️ Banco de Dados
 
-O projeto utiliza MySQL.
+- Um Event pode possuir vários Tickets
+- Um Participant pode comprar vários Tickets
+- Cada Ticket está associado a um único Event e um único Participant
 
-Estrutura da tabela event
+O Ticket atua como entidade de associação entre Event e Participant, representando a compra de um ingresso.
 
-|Campo	| Tipo |
+TABELAS
+
+Event
+
+| Campo	 |Tipo|
+|--------|---|
+| id	    |BIGINT (PK)|
+| name   |	VARCHAR(255)
+| date   |	DATETIME
+|location|	VARCHAR(255)
+|capacity	|INT
+
+Participant
+
+| Campo	 | Tipo
+|--------|---|
+| id     |	BIGINT (PK)
+| name	  |VARCHAR(255)
+| email	 |VARCHAR(255)
+
+Ticket
+
+| Campo |	Tipo|
 |---|---|
-|id	| BIGINT (PK)|
-|name |	VARCHAR(255)|
-|date	| DATETIME |
-|location	| VARCHAR(255) |
-|capacity	| INT|
+|id |	BIGINT (PK)|
+| event_id      | BIGINT (FK)
+|participant_id	| BIGINT (FK)
+|purchase_date	| DATETIME
 
 Obs: A versão do MySQL utilizada localmente é 5.7.
+
+
+📌 Endpoints Principais
+
+📅 Eventos
+
+| Método | 	Endpoint     |	Descrição|
+|--------|---------------|---|
+| POST   | 	/events	     |Criar evento|
+| GET	   | /events	      |Listar eventos|
+| GET	   | /events/{id}  |	Buscar evento por ID|
+| PUT	   | /events/{id}	 | Atualizar evento |
+|DELETE |	/events/{id}	| Remover evento|
+🎟️ Venda de Ingressos
+
+|Método	| Endpoint	| Descrição|
+|---|---|---|
+|POST|	/tickets/purchase	| Comprar ingresso|
+|GET |	/tickets/participant/{id}|	Histórico por participante (ID)|
+|GET	|/tickets/participant?email=	|Histórico por participante (email)|
+
+
+📊 Métricas
+
+|Método|	Endpoint |	Descrição|
+|---|---|---|
+|GET|	/tickets/count/event/{eventId}	|Total de ingressos vendidos por evento|
 
 ▶️ Como Executar a Aplicação
 Pré-requisitos

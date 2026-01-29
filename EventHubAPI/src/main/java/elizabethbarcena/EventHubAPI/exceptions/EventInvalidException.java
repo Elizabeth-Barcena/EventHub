@@ -1,7 +1,7 @@
 package elizabethbarcena.EventHubAPI.exceptions;
 
-public class EventInvalidException extends RuntimeException {
+public class EventInvalidException extends BusinessException {
     public EventInvalidException(Long id) {
-        super("Event invalid with id: " + id);
+        super(ErrorCode.EVENT_INVALID, "Event invalid with id: " + id);
     }
 }

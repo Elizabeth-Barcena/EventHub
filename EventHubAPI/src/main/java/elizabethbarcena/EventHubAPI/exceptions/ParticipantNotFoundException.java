@@ -1,11 +1,11 @@
 package elizabethbarcena.EventHubAPI.exceptions;
-public class ParticipantNotFoundException extends RuntimeException {
+public class ParticipantNotFoundException extends BusinessException {
 
     public ParticipantNotFoundException(Long id) {
-        super("Participant not found with id: " + id);
+        super(ErrorCode.PARTICIPANT_NOT_FOUND,"Participant not found with id: " + id);
     }
 
     public ParticipantNotFoundException(String email) {
-        super("Participant not found with email: " + email);
+        super(ErrorCode.PARTICIPANT_NOT_FOUND, "Participant not found with email: " + email);
     }
 }
