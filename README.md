@@ -4,6 +4,7 @@ API RESTful para gerenciamento de eventos, desenvolvida como parte do teste téc
 
 O projeto permite criar, atualizar,listar e remover eventos, vender ingressos, controlar capacidade, consultar histórico de compras seguindo boas práticas de desenvolvimento backend com Java e Spring Boot.
 
+---
 🚀 Tecnologias Utilizadas
 
 - Java 17
@@ -19,7 +20,7 @@ O projeto permite criar, atualizar,listar e remover eventos, vender ingressos, c
 - Maven
 
 - Swagger / OpenAPI (Springdoc)
-
+---
 📐 Arquitetura
 
 O projeto segue uma arquitetura em camadas, separando claramente as responsabilidades:
@@ -29,14 +30,15 @@ controller → service → repository → entity
 
 Além disso:
 
-DTOs são utilizados para entrada e saída de dados
+- DTOs são utilizados para entrada e saída de dados
 
-Mapper centraliza a conversão entre Entity e DTO
+- Mapper centraliza a conversão entre Entity e DTO
 
-Interface + implementação no Service
+- Interface + implementação no Service
 
-Exceções customizadas e handler global para padronização de erros
+- Exceções customizadas e handler global para padronização de erros
 
+---
 🗄🗄️ Modelo de Domínio
 
 🎫 Event
@@ -73,6 +75,7 @@ Regras de Validação
 
 Essas validações são realizadas utilizando Bean Validation, garantindo respostas adequadas (400 Bad Request) em caso de erro.
 
+---
 ⚙️ Banco de Dados
 
 - Um Event pode possuir vários Tickets
@@ -128,6 +131,7 @@ Chaves estrangeiras:
     tickets.event_id → events.id
     
     tickets.participant_id → participants.id
+---
 
 📌 Endpoints Principais
 
@@ -155,6 +159,7 @@ Chaves estrangeiras:
 |---|---|---|
 |GET|	/tickets/count/event/{eventId}	|Total de ingressos vendidos por evento|
 
+---
 🧪 Testes Unitários
 
 O projeto conta com testes unitários focados na camada de controller, utilizando MockMvc e Mockito.
@@ -172,7 +177,7 @@ Cobertura inclui:
 - Tentativa de exclusão de evento com ingressos vendidos
 
 - Tratamento de erros e status HTTP
-
+---
 ▶️ Como Executar a Aplicação
 Pré-requisitos
 
@@ -194,6 +199,8 @@ A aplicação ficará disponível em:
 
 http://localhost:8080
 
+---
+
 📖 Documentação da API (Swagger)
 
 Após iniciar a aplicação, acesse:
@@ -209,6 +216,8 @@ O Swagger permite:
 
 - Testar as requisições diretamente pelo navegador
 
+---
+
 ❗ Tratamento de Erros
 
 A API possui tratamento global de exceções, retornando respostas padronizadas para:
@@ -221,6 +230,7 @@ A API possui tratamento global de exceções, retornando respostas padronizadas 
     
     Erros com conflitos(409)
 
+---
 
 👤 Autora
 
