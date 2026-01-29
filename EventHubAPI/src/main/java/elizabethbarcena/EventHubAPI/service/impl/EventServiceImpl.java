@@ -3,9 +3,11 @@ package elizabethbarcena.EventHubAPI.service.impl;
 import elizabethbarcena.EventHubAPI.entity.Event;
 import elizabethbarcena.EventHubAPI.dto.request.EventRequest;
 import elizabethbarcena.EventHubAPI.dto.response.EventResponse;
+import elizabethbarcena.EventHubAPI.exceptions.EventHasTicketsException;
 import elizabethbarcena.EventHubAPI.exceptions.EventNotFoundException;
 import elizabethbarcena.EventHubAPI.mapper.EventMapper;
 import elizabethbarcena.EventHubAPI.repository.EventRepository;
+import elizabethbarcena.EventHubAPI.repository.TicketRepository;
 import elizabethbarcena.EventHubAPI.service.EventService;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
+    private final TicketRepository ticketRepository;
 
-    public EventServiceImpl(EventRepository eventRepository) {
+    public EventServiceImpl(EventRepository eventRepository, TicketRepository ticketRepository) {
         this.eventRepository = eventRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @Override
@@ -58,6 +62,10 @@ public class EventServiceImpl implements EventService {
     public void deleteEvent(Long id) {
         if (!eventRepository.existsById(id)) {
             throw new EventNotFoundException(id);
+        }
+
+        if (ticketRepository.countByEventId(id) > 0) {
+            throw new EventHasTicketsException(id);
         }
         eventRepository.deleteById(id);
     }

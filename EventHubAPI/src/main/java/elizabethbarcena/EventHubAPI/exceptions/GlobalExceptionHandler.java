@@ -63,7 +63,8 @@ public class GlobalExceptionHandler {
         return switch (errorCode) {
             case EVENT_NOT_FOUND, PARTICIPANT_NOT_FOUND -> HttpStatus.NOT_FOUND;
             case EVENT_SOLD_OUT -> HttpStatus.CONFLICT;
-            case EVENT_INVALID, BUSINESS_ERROR -> HttpStatus.BAD_REQUEST;
+            case EVENT_INVALID -> HttpStatus.CONFLICT;
+            case BUSINESS_ERROR -> HttpStatus.BAD_REQUEST;
             default -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }
