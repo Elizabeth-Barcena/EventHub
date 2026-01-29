@@ -22,16 +22,15 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public ParticipantResponse createOrGetParticipant(ParticipantRequest request) {
-        Participant participant = participantRepository
+    public Participant getOrCreateParticipant(ParticipantRequest request) {
+        return participantRepository
                 .findByEmail(request.getEmail())
                 .orElseGet(() -> {
                     Participant newParticipant = ParticipantMapper.toEntity(request);
                     return participantRepository.save(newParticipant);
                 });
-
-        return ParticipantMapper.toResponse(participant);
     }
+
 
     @Override
     public ParticipantResponse getParticipantById(Long id) {

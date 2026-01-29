@@ -2,7 +2,7 @@
 
 API RESTful para gerenciamento de eventos, desenvolvida como parte do teste técnico para a vaga de Analista de Desenvolvimento Júnior.
 
-A aplicação permite criar, listar, buscar, atualizar e remover eventos, seguindo boas práticas de desenvolvimento backend com Java e Spring Boot.
+O projeto permite criar, atualizar,listar e remover eventos, vender ingressos, controlar capacidade, consultar histórico de compras seguindo boas práticas de desenvolvimento backend com Java e Spring Boot.
 
 🚀 Tecnologias Utilizadas
 
@@ -33,13 +33,17 @@ DTOs são utilizados para entrada e saída de dados
 
 Mapper centraliza a conversão entre Entity e DTO
 
-Interface + implementação no Service para baixo acoplamento
+Interface + implementação no Service
 
 Exceções customizadas e handler global para padronização de erros
 
-🗄️ Modelo de Evento
+🗄🗄️ Modelo de Domínio
 
-Um evento possui os seguintes campos:
+🎫 Event
+
+Representa um evento disponível para venda de ingressos.
+
+Campos principais:
 
     id
     
@@ -49,7 +53,15 @@ Um evento possui os seguintes campos:
     
     location
     
-    capacity
+    capacity (quantidade de ingressos disponíveis)
+
+Regras
+
+- A capacidade inicial deve ser maior que zero
+
+- A cada venda de ingresso, a capacidade é decrementada
+
+- Não é possível vender ingresso quando a capacidade é zero
 
 Regras de Validação
 
@@ -63,19 +75,103 @@ Essas validações são realizadas utilizando Bean Validation, garantindo respos
 
 ⚙️ Banco de Dados
 
-O projeto utiliza MySQL.
+- Um Event pode possuir vários Tickets
+- Um Participant pode comprar vários Tickets
+- Cada Ticket está associado a um único Event e um único Participant
+- Eventos com ingressos vendidos não podem ser excluídos
 
-Estrutura da tabela event
+O Ticket atua como entidade de associação entre Event e Participant, representando a compra de um ingresso.
 
-|Campo	| Tipo |
+TABELAS
+
+Event
+
+| Campo	 |Tipo|
+|--------|---|
+| id	    |BIGINT (PK)|
+| name   |	VARCHAR(255)|
+| date   |	DATETIME|
+|location|	VARCHAR(255)|
+|capacity	|INT|
+
+Participant
+
+| Campo	 | Tipo|
+|--------|---|
+| id     |	BIGINT (PK)|
+| name	  |VARCHAR(255)|
+| email	 |VARCHAR(255)|
+
+Ticket
+
+| Campo |	Tipo|
 |---|---|
-|id	| BIGINT (PK)|
-|name |	VARCHAR(255)|
-|date	| DATETIME |
-|location	| VARCHAR(255) |
-|capacity	| INT|
+|id |	BIGINT (PK)|
+| event_id      | BIGINT (FK)|
+|participant_id	| BIGINT (FK)|
+|purchase_date	| DATETIME|
 
 Obs: A versão do MySQL utilizada localmente é 5.7.
+### Relação entre as Tabelas
+
+- Um Event pode possuir vários Tickets
+
+- Um Participant pode comprar vários Tickets
+
+- Cada Ticket está associado a um único Event e a um único Participant
+
+    Event (1) ──── (N) Ticket (N) ──── (1) Participant
+
+
+Chaves estrangeiras:
+
+    tickets.event_id → events.id
+    
+    tickets.participant_id → participants.id
+
+📌 Endpoints Principais
+
+📅 Eventos
+
+| Método | 	Endpoint     |	Descrição|
+|--------|---------------|---|
+| POST   | 	/events	     |Criar evento|
+| GET	   | /events	      |Listar eventos|
+| GET	   | /events/{id}  |	Buscar evento por ID|
+| PUT	   | /events/{id}	 | Atualizar evento |
+|DELETE |	/events/{id}	| Remover evento|
+🎟️ Venda de Ingressos
+
+|Método	| Endpoint	| Descrição|
+|---|---|---|
+|POST|	/tickets/purchase	| Comprar ingresso|
+|GET |	/tickets/participant/{id}|	Histórico por participante (ID)|
+|GET	|/tickets/participant?email=	|Histórico por participante (email)|
+
+
+📊 Métricas
+
+|Método|	Endpoint |	Descrição|
+|---|---|---|
+|GET|	/tickets/count/event/{eventId}	|Total de ingressos vendidos por evento|
+
+🧪 Testes Unitários
+
+O projeto conta com testes unitários focados na camada de controller, utilizando MockMvc e Mockito.
+
+Cobertura inclui:
+
+- Criação e validação de eventos
+
+- Venda de ingressos
+
+- Controle de capacidade
+
+- Histórico de ingressos por participante
+
+- Tentativa de exclusão de evento com ingressos vendidos
+
+- Tratamento de erros e status HTTP
 
 ▶️ Como Executar a Aplicação
 Pré-requisitos
@@ -122,6 +218,8 @@ A API possui tratamento global de exceções, retornando respostas padronizadas 
     Erros de validação (400)
     
     Erros inesperados (500)
+    
+    Erros com conflitos(409)
 
 
 👤 Autora
